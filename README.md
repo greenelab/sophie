@@ -31,9 +31,9 @@ bash install.sh
 ```
 6. Navigate to any of the directories below to apply SOPHIE:
 
-Name | Type | Description |
-| :--- | :--- | :---------- |
-[pre_model_seen_template](pre_model_seen_template/) | Existing model and template experiment in training dataset| Here we use an existing trained VAE model and simulate a background dataset using a template experiment that is included in the training dataset (i.e. the datasets used to train the VAE model). |
-[pre_model_unseen_template](pre_model_unseen_template/) | Existing model and template experiment not in training dataset| Here we use an existing trained VAE model and simulate a background dataset using a template experiment that is *not* included in the training dataset (i.e. the datasets used to train the VAE model).|
-[new_model_seen_template](new_model_seen_template/) | New model and template experiment in training dataset| Here we train a new VAE model. Then simulate a background dataset using a template experiment that is included in the training dataset (i.e. the datasets used to train the VAE model). |
-[new_model_unseen_template](new_model_unseen_template/) | New model and template experiment not in training dataset| Here we train a new VAE model. Then simulate a background dataset using a template experiment that is *not* included in the training dataset (i.e. the datasets used to train the VAE model).|
+Name | Description |
+| :--- | :---------- |
+[pre_model_seen_template](pre_model_seen_template/) | Here we use an existing trained VAE model and simulate a background dataset using a template experiment that is included in the training dataset (i.e. the datasets used to train the VAE model). |
+[pre_model_unseen_template](pre_model_unseen_template/) | Here we use an existing trained VAE model and simulate a background dataset using a template experiment that is **not included** in the training dataset (i.e. the datasets used to train the VAE model).|
+[new_model_seen_template](new_model_seen_template/) | Here we train a new VAE model. Then simulate a background dataset using a template experiment that is included in the training dataset (i.e. the datasets used to train the VAE model). |
+[new_model_unseen_template](new_model_unseen_template/) | Here we train a new VAE model. Then simulate a background dataset using a template experiment that is **not included** in the training dataset (i.e. the datasets used to train the VAE model).|
