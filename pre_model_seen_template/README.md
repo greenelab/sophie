@@ -15,10 +15,7 @@ Parameters for input data files and directories to create
 | base_dir| str: Root directory containing analysis subdirectories. By default the path is one level up from where the scripts are run.|
 | local_dir| str: Parent directory on local machine to store intermediate results. Make sure to end path name with "/"|
 | dataset_name| str: Name for analysis directory, which contains the notebooks being run. For example, this analysis directory is named "pre_model_seen_template".|
-| normalized_compendium_filename | str: The location of the normalized compendium gene expression data file. 
-* normalized recount2 can be found [here](https://storage.googleapis.com/recount2/normalized_recount2_compendium.tsv)
-* normalized Powers et. al. can be found [here](https://storage.googleapis.com/powers_et_al/normalized_rani_compendium_filename.tsv).
-* normalized _P. aeruginosa_ can be found [here](https://storage.googleapis.com/pseudomonas/normalized_pseudomonas_compendium_data.tsv).|
+| normalized_compendium_filename | str: The location of the normalized compendium gene expression data file. Normalized data can be found here: [recount2 normalized](https://storage.googleapis.com/recount2/normalized_recount2_compendium.tsv), [Powers et al. normalized](https://storage.googleapis.com/powers_et_al/normalized_rani_compendium_filename.tsv), [P. aeruginosa normalized](https://storage.googleapis.com/pseudomonas/normalized_pseudomonas_compendium_data.tsv).|
 | experiment_to_sample_filename | str:  File mapping experiment ids to sample ids|
 | metadata_delimiter | str:  Delimiter ("," or "\t") used in the metadata file that maps experiment id to sample ids|
 | experiment_id_colname | str:  Header of experiment-to-sample metadata file corresponding to the column containing experiment ids. This is used to extract gene expression data associated with project_id|

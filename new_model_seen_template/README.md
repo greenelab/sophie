@@ -41,12 +41,6 @@ Parameters for intermediate files created. Names of files need to be specified:
 | normalized_compendium_filename | str: Normalized compendium gene expression data filename.| 
 | raw_template_filename | str: Un-normalized template gene expression data filename. This file is generated using the project_id to select out the associated expression data. The data in this raw_template filename will be used to compare gene expression changes in reference to a compendium of simulated experiments.|
 
-
-EXTRA
-| normalized_compendium_filename | str: Normalized compendium gene expression data file.|
-| raw_template_filename | str: Downloaded template gene expression data file. The input dataset should be a matrix that is sample x gene. The file should tab-delimited. The gene ids should be HGNC symbols (if using human data) or PA numbers (if using *P. aeruginosa* data). The input dataset should be generated using the same platform as the model you plan to use (i.e. RNA-seq or array). The expression values are expected to have been uniformly processed and can be estimated counts (RNA-seq) or log2 expression (array).|
-| raw_compendium_filename | str: Downloaded compendium gene expression data file. The input dataset should be a matrix that is sample x gene. The file should tab-delimited. The gene ids should be HGNC symbols (if using human data) or PA numbers (if using *P. aeruginosa* data). The input dataset should be generated using the same platform as the model you plan to use (i.e. RNA-seq or array). The expression values are expected to have been uniformly processed and can be estimated counts (RNA-seq) or log2 expression (array).|
-
 2. Create metadata files that specify how samples within the selected template experiment should be grouped for the differential expression analysis. 
 An example can be seen [here]()
 

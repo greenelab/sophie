@@ -16,10 +16,7 @@ Parameters for input data files and directories to create
 | local_dir| str: Parent directory on local machine to store intermediate results. Make sure to end path name with "/"|
 | dataset_name| str: Name for analysis directory, which contains the notebooks being run. For example, this analysis directory is named "pre_model_unseen_template".|
 | raw_template_filename | str: Downloaded template gene expression data file. The input dataset should be a matrix that is sample x gene. The file should tab-delimited. The gene ids should be HGNC symbols (if using human data) or PA numbers (if using *P. aeruginosa* data). The input dataset should be generated using the same platform as the model you plan to use (i.e. RNA-seq or array). The expression values are expected to have been uniformly processed and can be estimated counts (RNA-seq) or log2 expression (array).|
-| normalized_compendium_filename | str: The location of the normalized compendium gene expression data file. 
-* normalized recount2 can be found [here](https://storage.googleapis.com/recount2/normalized_recount2_compendium.tsv)
-* normalized Powers et. al. can be found [here](https://storage.googleapis.com/powers_et_al/normalized_rani_compendium_filename.tsv).
-* normalized _P. aeruginosa_ can be found [here](https://storage.googleapis.com/pseudomonas/normalized_pseudomonas_compendium_data.tsv).|
+| normalized_compendium_filename | str: Tstr: The location of the normalized compendium gene expression data file. Normalized data can be found here: [recount2 normalized](https://storage.googleapis.com/recount2/normalized_recount2_compendium.tsv), [Powers et al. normalized](https://storage.googleapis.com/powers_et_al/normalized_rani_compendium_filename.tsv), [P. aeruginosa normalized](https://storage.googleapis.com/pseudomonas/normalized_pseudomonas_compendium_data.tsv).|
 | project_id | str:  The experiment id to use as template experiment. This experiment is **not contained** within the training dataset that was used to train the VAE. The id is used to name intermediate simulated data files created.|
 | num_simulated| int: The number of experiments to simulate. Experiments are simulated by shifting the template experiment in the latent space.|
 | vae_model_dir | str:  The location where the VAE model files (.h5) are stored.|
