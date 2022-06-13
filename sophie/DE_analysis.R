@@ -126,6 +126,12 @@ get_DE_stats_DESeq <- function(metadata_file,
 
   print("Checking sample ordering...")
   print(all.equal(colnames(expression_data), rownames(metadata)))
+  
+  # re order metadata table if it doesn't match to expression_data
+  if(!(all.equal(colnames(expression_data), metadata$sample))) {
+    print("reordering samples...")
+    metadata <- metadata[order(match(metadata$sample, colnames(expression_data))), ]
+  }
 
   group <- interaction(metadata[,1])
 
