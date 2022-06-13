@@ -20,7 +20,6 @@ Parameters for input data files and directories to create
 | project_id | str:  The experiment id to use as template experiment. This experiment is **not contained** within the training dataset that was used to train the VAE. The id is used to name intermediate simulated data files created.|
 | num_simulated| int: The number of experiments to simulate. Experiments are simulated by shifting the template experiment in the latent space. In general, [Lee et al., Figure S4](https://www.biorxiv.org/content/10.1101/2021.05.24.445440v3) found that downstream statistical results were robust to different numbers of simulated experiments so starting with 25 experiments can compromise on the runtime of the downstream analyses. |
 | vae_model_dir | str:  The location where the VAE model files (.h5) are stored.|
-| vae_model_dir | str:  The location where the VAE model files (.h5) are stored.|
 | scaler_filename | str: The location where the scaler file is stored. This file was generated during the VAE training process.|
 | DE_method| str: "limma" or "DESeq". Differential expression method to use.|
 
