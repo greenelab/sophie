@@ -35,7 +35,7 @@ Parameters for input data files supplied by the user, directories that sophie wi
 | validation_frac | float: Fraction of samples to use for validation in VAE training|
 
 Parameters for intermediate files created. Names of files need to be specified:
-*Note: These file paths need to be created for the user in order to be used.*
+*Note: Ensure these file paths exists.*
 
 | Name | Description |
 | :--- | :---------- |
