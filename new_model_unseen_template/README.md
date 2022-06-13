@@ -8,7 +8,7 @@ When editing this configuration file, use a text editor instead of excel.
 
 The definition for each paramter in the configuation file is describe below:
 
-Parameters for input data files and directories to create
+Parameters for input data files supplied by the user, directories that sophie will create, and parameters that control the execution behavior of sophie.
 
 | Name | Description |
 | :--- | :---------- |
