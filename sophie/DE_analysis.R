@@ -47,12 +47,6 @@ get_DE_stats_limma <- function(metadata_file,
     read.csv(metadata_file, sep="\t", header=TRUE, row.names=1)
   )
 
-  # NOTE: It make sure the metadata is in the same order
-  # as the column names of the expression matrix.
-  group <- interaction(metadata[,1])
-
-  mm <- model.matrix(~0 + group)
-
   ## DEGs of simulated data
   # lmFit expects input array to have structure: gene x sample
   # lmFit fits a linear model using weighted least squares for each gene:
