@@ -122,7 +122,7 @@ get_DE_stats_DESeq <- function(metadata_file,
   #   Used as identifier for different simulated experiments
 
   expression_data <- t(read.csv(expression_file, sep="\t", header=TRUE, row.names=1))
-  metadata <- as.matrix(read.csv(metadata_file, sep="\t", header=TRUE, row.names=1))
+  metadata <- read.csv(metadata_file, sep="\t", header=TRUE, row.names=1)
 
   print("Checking sample ordering...")
   print(all.equal(colnames(expression_data), rownames(metadata)))
