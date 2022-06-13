@@ -24,7 +24,7 @@ Parameters for input data files and directories to create
 | DE_method| str: "limma" or "DESeq". Differential expression method to use.|
 
 Parameters for intermediate files created. Names of files need to be specified:
-*Note: These file paths need to be created for the user in order to be used.*
+*Note: Ensure these file paths exists.*
 
 | Name | Description |
 | :--- | :---------- |
