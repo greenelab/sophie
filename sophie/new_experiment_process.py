@@ -13,7 +13,6 @@ import pandas as pd
 import glob
 from keras.models import load_model
 import matplotlib.pyplot as plt
-from matplotlib_venn import venn2
 
 
 def transpose_save(input_gene_expression_filename, output_gene_expression_filename):
@@ -44,8 +43,6 @@ def compare_match_features(template_filename, compendium_filename):
         
     compendium_filename: str
         File containing un-normalized compendium gene expression data. 
-        Gene ids are either using PA#### (P. aeruginosa)
-        or using HGNC symbols (Human)
         
     """
     # Read template experiment
