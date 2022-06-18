@@ -2,7 +2,7 @@ base_dir	"../"
 local_dir	"/home/alexandra/Documents/Data/SOPHIE/"
 dataset_name	"pre_model_unseen_template"
 raw_template_filename	"../data/input/template_data_example.tsv"
-raw_compendium_filename	"../data/input/mapped_recount2_compendium.tsv"
+raw_compendium_filename	"https://storage.googleapis.com/recount2/mapped_recount2_compendium.tsv"
 normalized_compendium_filename	"https://storage.googleapis.com/recount2/normalized_recount2_compendium.tsv"
 project_id	"costello"
 num_simulated	2

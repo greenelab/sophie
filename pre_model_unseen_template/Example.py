@@ -116,57 +116,6 @@ processed_template_filename = params["processed_template_filename"]
 output_filename = params["output_filename"]
 # -
 
-# ## Normalize template experiment
-#
-# Use scaler transform that was used to normalize the training compendium
-
-# +
-#test = pd.read_csv(processed_template_filename, sep="\t", index_col=0, header=0)
-# -
-
-"""print(test.shape)
-test.head()"""
-
-"""# Load pickled file
-scaler = pickle.load(open(scaler_filename, "rb"))"""
-
-"""# Read data
-raw_template = pd.read_csv(
-    raw_template_filename, header=0, sep="\t", index_col=0
-)
-
-# Normalize the data using scaler transform in order to simulate data
-normalized_template = scaler.transform(raw_template)
-
-normalized_template_df = pd.DataFrame(
-    normalized_template,
-    columns=raw_template.columns,
-    index=raw_template.index,
-)
-
-# Save normalized template
-normalized_template_normalized.to_csv(normalized_template_filename, sep="\t")"""
-
-"""mapped_compendium_filename = "/home/alexandra/Documents/Data/Generic_expression_patterns/mapped_recount2_compendium.tsv"
-normalized_compendium = pd.read_csv(mapped_compendium_filename, sep="\t", index_col=0, header=0)
-print(normalized_compendium.shape)"""
-
-# +
-#normalized_compendium.head()
-
-# +
-# REad in raw_template
-#raw_template_filename = "/home/alexandra/Documents/Data/Generic_expression_patterns/Costello_BladderCancer_example.txt"
-#raw_template = pd.read_csv(raw_template_filename, sep="\t", index_col=0, header=0)
-#print(raw_template.shape)
-
-# +
-#raw_template.T.head()
-
-# +
-#raw_template.T.to_csv("../data/input/template_data_example.tsv", sep="\t")
-# -
-
 # ## Process template experiment
 #
 # This step:
