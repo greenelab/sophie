@@ -16,16 +16,15 @@ Parameters for input data files and directories to create
 | local_dir| str: Parent directory on local machine to store intermediate results. Make sure to end path name with "/".|
 | dataset_name| str: Name for analysis directory, which contains the notebooks being run. For example, this analysis directory is named "pre_model_seen_template".|
 | normalized_compendium_filename | str: The location of the normalized compendium gene expression data file. Normalized data can be found here: [recount2 normalized](https://storage.googleapis.com/recount2/normalized_recount2_compendium.tsv), [Powers et al. normalized](https://storage.googleapis.com/powers_et_al/normalized_rani_compendium_filename.tsv), [P. aeruginosa normalized](https://storage.googleapis.com/pseudomonas/normalized_pseudomonas_compendium_data.tsv).|
-| experiment_to_sample_filename | str:  File mapping experiment ids to sample ids.|
+| metadata_filename | str:  File mapping experiment ids to sample ids.|
 | metadata_delimiter | str:  Delimiter ("," or "\t") used in the metadata file that maps experiment id to sample ids.|
-| experiment_id_colname | str:  Header of experiment-to-sample metadata file corresponding to the column containing experiment ids. This is used to extract gene expression data associated with project_id.|
-| sample_id_colname | str:   Header of experiment-to-sample metadata file to indicate column containing sample ids.This is used to extract gene expression data associated with project_id.|
+| metadata_experiment_colname | str:  Header of metadata_filename corresponding to the column containing experiment ids. This is used to extract gene expression data associated with project_id.|
+| metadata_sample_colname | str:   Header of metadata_filename to indicate column containing sample ids.This is used to extract gene expression data associated with project_id.|
 | project_id | str:  The experiment id to use as template experiment. This experiment must be contained within the training dataset that was used to train the VAE. The id is using the values found in the <metadata_experiment_colname> column of the <experiment_to_sample_filename>. This <project_id> corresponds to a group of samples that were used to test an single hypothesis. This parameter is used to pull out the template expression data from the normalized compendium and to simulate data based on this experiment.|
 | num_simulated| int: The number of experiments to simulate. Experiments are simulated by shifting the template experiment in the latent space. In general, [Lee et al., Figure S4](https://www.biorxiv.org/content/10.1101/2021.05.24.445440v3) found that downstream statistical results were robust to different numbers of simulated experiments so starting with 25 experiments can compromise on the runtime of the downstream analyses. |
 | vae_model_dir | str:  The location where the VAE model files (.h5) are stored.|
-| scaler_filename | str: The location where the scaler file is stored. This file was generated during the VAE training process.|
 | latent_dim | int:  The latent dimension size. If using recount2 its 30, if using Powers et al. its 30, if using P. aeruginosa its 30.|
-| scaler_filename | str: The location where the scaler file is stored. This file was generated during the VAE training process.|
+| scaler_transform_filename | str: The location where the scaler file is stored. This file was generated during the VAE training process. The scaler files can be found [here](data/scalers/)|
 | DE_method| str: "limma" or "DESeq". Differential expression method to use.|
 | count_threshold | int: Remove genes that have mean count <= count_threshold. By default this threshold is set to None, then no genes are removed.|
 | template_process_samples_filename | str: Metadata file that maps sample ids to labels that indicate if the sample is kept or discarded. |

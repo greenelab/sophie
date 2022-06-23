@@ -27,8 +27,6 @@ train_vae_modules.set_all_seeds()
 
 # +
 # Read in config variables
-base_dir = os.path.abspath(os.path.join(os.getcwd(), "../"))
-
 config_filename = "config_example.tsv"
 
 params = utils.read_config(config_filename)
@@ -46,42 +44,19 @@ raw_compendium_filename = params["raw_compendium_filename"]
 normalized_compendium_filename = params["normalized_compendium_filename"]
 # -
 
-# ## Make directories
+# ## Setup directories
 
-# +
-# TO DO: Add with new ponyo version
-# -
+utils.setup_dir(config_filename)
 
 # ## Normalize compendium
 
-"""train_vae_modules.normalize_expression_data(
-    base_dir, ## TO DO: remove after update
+train_vae_modules.normalize_expression_data(
     config_filename,
     raw_compendium_filename,
     normalized_compendium_filename)
-"""
-## TO DO: change to scaler_filename with new version
 
 # ## Train VAE
 
-# +
-## TO DO: REMOVE with new ponyo version
-# Create VAE directories if needed
-
-# REMOVE LATER
-NN_architecture = "NN_test"
-dataset_name = "new_model_seen_template"
-
-output_dirs = [
-    os.path.join(base_dir, dataset_name, "models"),
-    os.path.join(base_dir, dataset_name, "logs"),
-]
-
-# Check if NN architecture directory exist otherwise create
-for each_dir in output_dirs:
-    sub_dir = os.path.join(each_dir, NN_architecture)
-    os.makedirs(sub_dir, exist_ok=True)
-# -
-
-# Train VAE on new compendium data
-train_vae_modules.train_vae(config_filename, normalized_compendium_filename)
+# Train VAE
+train_vae_modules.train_vae(config_filename,
+                            normalized_compendium_filename)

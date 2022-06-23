@@ -31,12 +31,9 @@ import matplotlib.pyplot as plt
 from ponyo import utils, simulate_expression_data
 from sophie import (
     process,
-    new_experiment_process, #REMOVE
     stats,
     ranking,
 )
-# Remove later
-import pickle
 
 # ## Inputs
 #
@@ -44,14 +41,15 @@ import pickle
 
 # +
 # Read in config variables
-base_dir = os.path.abspath(os.path.join(os.getcwd(), "../"))
-
 config_filename = "config_example.tsv"
 
 params = utils.read_config(config_filename)
 
 # +
 # Load config params
+
+# Root directory containing analysis subdirectories and scripts
+base_dir = params["base_dir"]
 
 # Local directory to store intermediate files
 local_dir = params["local_dir"]
@@ -69,7 +67,10 @@ normalized_compendium_filename = params["normalized_compendium_filename"]
 project_id = params["project_id"]
 
 # Number of simulated experiments to generate
-num_runs = params["num_simulated"]
+num_simulated = params["num_simulated"]
+
+# Directory containing simulated experiments
+simulated_data_dir = params["simulated_data_dir"]
 
 # Directory containing trained VAE model
 vae_model_dir = params["vae_model_dir"]
@@ -78,7 +79,7 @@ vae_model_dir = params["vae_model_dir"]
 latent_dim = params["latent_dim"]
 
 # Scaler transform used to scale compendium data into 0-1 range for training
-scaler_filename = params["scaler_filename"]
+scaler_transform_filename = params["scaler_transform_filename"]
 
 # Which DE method to use
 # We recommend that if data is RNA-seq then use DESeq2
@@ -122,55 +123,15 @@ output_filename = params["output_filename"]
 # 1. Normalizes the template experiment such that the template experiment and compendium experiment are in the same range
 # 2. Ensures that the feature space (i.e. gene ids) are the same in the template and compendium
 
-new_experiment_process.process_template_experiment(
+simulate_expression_data.process_template_experiment(
     raw_template_filename,
     raw_compendium_filename,
-    scaler_filename,
+    scaler_transform_filename,
     mapped_template_filename,
     normalized_template_filename,
 )
 
 # ## Simulate data
-
-# +
-# Simulate multiple experiments UPDATE COMMENT
-# This step creates the following files in "<local_dir>/pseudo_experiment/" directory:
-#   - selected_simulated_data_SRP012656_<n>.txt
-#   - selected_simulated_encoded_data_SRP012656_<n>.txt
-#   - template_normalized_data_SRP012656_test.txt
-# in which "<n>" is an integer in the range of [0, num_runs-1]
-
-# REMOVE LATER
-dataset_name = "new_model_unseen_template"
-# Load pickled file
-scaler = pickle.load(open(scaler_filename, "rb"))
-
-# Update simulated dir
-os.makedirs(os.path.join(local_dir, "pseudo_experiment"), exist_ok=True)
-
-# Update to take in file to be consisten
-normalized_compendium = pd.read_csv(
-    normalized_compendium_filename, header=0, sep="\t", index_col=0
-)
-normalized_template = pd.read_csv(
-    normalized_template_filename, header=0, sep="\t", index_col=0
-)
-#------------
-# Update call when new version of ponyo
-for run_id in range(num_runs):
-    new_experiment_process.embed_shift_template_experiment(
-        normalized_compendium,
-        normalized_template,
-        vae_model_dir,
-        project_id,
-        scaler_filename,
-        local_dir,
-        latent_dim,
-        run_id,
-    )
-# -
-
-template_process_samples_filename
 
 # ## Process template and simulated experiments
 #
@@ -195,7 +156,7 @@ if de_method == "deseq":
     )
 
     # Process simulated data
-    for i in range(num_runs):
+    for i in range(num_simulated):
         simulated_filename = os.path.join(
             local_dir,
             "pseudo_experiment",
@@ -221,7 +182,7 @@ else:
         template_process_samples_filename,
     )
 
-    for i in range(num_runs):
+    for i in range(num_simulated):
         simulated_filename = os.path.join(
             local_dir,
             "pseudo_experiment",
@@ -269,12 +230,12 @@ os.makedirs(os.path.join(local_dir, "DE_stats"), exist_ok=True)
 #     )
 # }
 
-# + magic_args="-i template_DE_grouping_filename -i project_id -i base_dir -i local_dir -i num_runs -i de_method" language="R"
+# + magic_args="-i template_DE_grouping_filename -i project_id -i base_dir -i local_dir -i num_simulated -i de_method" language="R"
 #
 # source(paste0(base_dir, '/sophie/DE_analysis.R'))
 #
 # # Files created: "<local_dir>/DE_stats/DE_stats_simulated_data_<project_id>_<n>.txt"
-# for (i in 0:(num_runs-1)){
+# for (i in 0:(num_simulated-1)){
 #     simulated_data_filename <- paste(
 #         local_dir,
 #         "pseudo_experiment/selected_simulated_data_",
@@ -328,7 +289,7 @@ else:
 template_DE_stats, simulated_DE_summary_stats = ranking.process_and_rank_genes_pathways(
     template_DE_stats_filename,
     local_dir,
-    num_runs,
+    num_simulated,
     project_id,
     analysis_type,
     col_to_rank_genes,

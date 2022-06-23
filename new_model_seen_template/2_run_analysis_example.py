@@ -34,8 +34,6 @@ from sophie import (
     stats,
     ranking,
 )
-# Remove later
-import pickle
 
 # ## Inputs
 #
@@ -43,14 +41,15 @@ import pickle
 
 # +
 # Read in config variables
-base_dir = os.path.abspath(os.path.join(os.getcwd(), "../"))
-
 config_filename = "config_example.tsv"
 
 params = utils.read_config(config_filename)
 
 # +
 # Load config params
+
+# Root directory containing analysis subdirectories and scripts
+base_dir = params["base_dir"]
 
 # Local directory to store intermediate files
 local_dir = params["local_dir"]
@@ -59,27 +58,30 @@ local_dir = params["local_dir"]
 normalized_compendium_filename = params["normalized_compendium_filename"]
 
 # Metadata file that maps experiment ids to sample ids
-experiment_to_sample_filename = params["experiment_to_sample_filename"]
+metadata_filename = params["metadata_filename"]
 
 # Delimiter used in metadata file
 metadata_delimiter = params["metadata_delimiter"]
 
 # Column header corresponding to experiment id and sample id
-experiment_id_colname = params["experiment_id_colname"]
-sample_id_colname = params["sample_id_colname"]
+metadata_experiment_colname = params["metadata_experiment_colname"]
+metadata_sample_colname = params["metadata_sample_colname"]
 
 # ID for template experiment to be selected
 project_id = params["project_id"]
 
 # Number of simulated experiments to generate
-num_runs = params["num_simulated"]
+num_simulated = params["num_simulated"]
+
+# Directory containing simulated experiments
+simulated_data_dir = params["simulated_data_dir"]
 
 # Size of the latent dimension
 latent_dim = params["latent_dim"]
 
 # Scaler transform used to scale compendium data into 0-1 range for training
 ## TO DO: change to scaler_filename with new version
-scaler_filename = params["scaler_transform_filename"]
+scaler_transform_filename = params["scaler_transform_filename"]
 
 # Which DE method to use
 # We recommend that if data is RNA-seq then use DESeq2
@@ -121,20 +123,19 @@ output_filename = params["output_filename"]
 
 process.fetch_template_experiment(
     normalized_compendium_filename,
-    experiment_to_sample_filename,
+    metadata_filename,
     metadata_delimiter,
-    experiment_id_colname,
+    metadata_experiment_colname,
     project_id,
-    sample_id_colname,
-    scaler_filename,
+    metadata_sample_colname,
+    scaler_transform_filename,
     raw_template_filename,
     normalized_template_filename
 )
 
 # ## Simulate data
 
-# +
-# Simulate multiple experiments UPDATE COMMENT
+"""# Simulate multiple experiments UPDATE COMMENT
 # This step creates the following files in "<local_dir>/pseudo_experiment/" directory:
 #   - selected_simulated_data_SRP012656_<n>.txt
 #   - selected_simulated_encoded_data_SRP012656_<n>.txt
@@ -165,8 +166,7 @@ simulate_expression_data.shift_template_experiment(
     local_dir,
     base_dir,
     num_runs,
-)
-# -
+)"""
 
 # ## Process template and simulated experiments
 #
@@ -191,7 +191,7 @@ if de_method == "deseq":
     )
 
     # Process simulated data
-    for i in range(num_runs):
+    for i in range(num_simulated):
         simulated_filename = os.path.join(
             local_dir,
             "pseudo_experiment",
@@ -217,7 +217,7 @@ else:
         template_process_samples_filename,
     )
 
-    for i in range(num_runs):
+    for i in range(num_simulated):
         simulated_filename = os.path.join(
             local_dir,
             "pseudo_experiment",
@@ -265,12 +265,12 @@ os.makedirs(os.path.join(local_dir, "DE_stats"), exist_ok=True)
 #     )
 # }
 
-# + magic_args="-i template_DE_grouping_filename -i project_id -i base_dir -i local_dir -i num_runs -i de_method" language="R"
+# + magic_args="-i template_DE_grouping_filename -i project_id -i base_dir -i local_dir -i num_simulated -i de_method" language="R"
 #
 # source(paste0(base_dir, '/sophie/DE_analysis.R'))
 #
 # # Files created: "<local_dir>/DE_stats/DE_stats_simulated_data_<project_id>_<n>.txt"
-# for (i in 0:(num_runs-1)){
+# for (i in 0:(num_simulated-1)){
 #     simulated_data_filename <- paste(
 #         local_dir,
 #         "pseudo_experiment/selected_simulated_data_",
@@ -324,7 +324,7 @@ else:
 template_DE_stats, simulated_DE_summary_stats = ranking.process_and_rank_genes_pathways(
     template_DE_stats_filename,
     local_dir,
-    num_runs,
+    num_simulated,
     project_id,
     analysis_type,
     col_to_rank_genes,
