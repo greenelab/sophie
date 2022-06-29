@@ -122,6 +122,8 @@ output_filename = params["output_filename"]
 # This step:
 # 1. Normalizes the template experiment such that the template experiment and compendium experiment are in the same range
 # 2. Ensures that the feature space (i.e. gene ids) are the same in the template and compendium
+#
+# The template experiment is expected to have the same genes as the compendium experiment. Genes that are in the template experiment but not in the compendium are removed. Genes that are in the compendium but missing in the template experiment are added and the gene expression value is set to the median gene expression value of that gene across the samples in the compendium. Additionally, the template values are expected to come from the same distribution as the compendium dataset (i.e. both the template and compendium expression measurements are estimated counts). This is necessary since SOPHIE applies the same scale factor used to normalize the compendium to normalize the template experiment. If the template has a different range of expression values, then the scaling will result in outliers (i.e. values greater than 1) which the cross entropy loss in the VAE will not handle.
 
 simulate_expression_data.process_template_experiment(
     raw_template_filename,
@@ -132,6 +134,19 @@ simulate_expression_data.process_template_experiment(
 )
 
 # ## Simulate data
+
+# Run simulation
+simulate_expression_data.embed_shift_template_experiment(
+    normalized_compendium_filename,
+    normalized_template_filename,
+    vae_model_dir,
+    project_id,
+    scaler_transform_filename,
+    local_dir,
+    latent_dim,
+    num_simulated,
+    simulated_data_dir,
+)
 
 # ## Process template and simulated experiments
 #
@@ -158,14 +173,12 @@ if de_method == "deseq":
     # Process simulated data
     for i in range(num_simulated):
         simulated_filename = os.path.join(
-            local_dir,
-            "pseudo_experiment",
-            f"selected_simulated_data_{project_id}_{i}.txt",
+            simulated_data_dir,
+            f"selected_simulated_data_{project_id}_{i}.tsv",
         )
         out_simulated_filename = os.path.join(
-            local_dir,
-            "pseudo_experiment",
-            f"selected_simulated_data_{project_id}_{i}_processed.txt",
+            simulated_data_dir,
+            f"selected_simulated_data_{project_id}_{i}_processed.tsv",
         )
         stats.process_samples_for_DESeq(
             simulated_filename,
@@ -184,9 +197,8 @@ else:
 
     for i in range(num_simulated):
         simulated_filename = os.path.join(
-            local_dir,
-            "pseudo_experiment",
-            f"selected_simulated_data_{project_id}_{i}.txt",
+            simulated_data_dir,
+            f"selected_simulated_data_{project_id}_{i}.tsv",
         )
         stats.process_samples_for_limma(
             simulated_filename,
@@ -200,9 +212,6 @@ else:
 
 # Create subdirectory: "<local_dir>/DE_stats/"
 os.makedirs(os.path.join(local_dir, "DE_stats"), exist_ok=True)
-
-# +
-# Pass simulated dir to R scripts below
 
 # + magic_args="-i template_DE_grouping_filename -i project_id -i processed_template_filename -i local_dir -i base_dir -i de_method" language="R"
 #
@@ -230,19 +239,19 @@ os.makedirs(os.path.join(local_dir, "DE_stats"), exist_ok=True)
 #     )
 # }
 
-# + magic_args="-i template_DE_grouping_filename -i project_id -i base_dir -i local_dir -i num_simulated -i de_method" language="R"
+# + magic_args="-i template_DE_grouping_filename -i project_id -i base_dir -i simulated_data_dir -i num_simulated -i de_method" language="R"
 #
 # source(paste0(base_dir, '/sophie/DE_analysis.R'))
 #
 # # Files created: "<local_dir>/DE_stats/DE_stats_simulated_data_<project_id>_<n>.txt"
 # for (i in 0:(num_simulated-1)){
 #     simulated_data_filename <- paste(
-#         local_dir,
-#         "pseudo_experiment/selected_simulated_data_",
+#         simulated_data_dir,
+#         "/selected_simulated_data_",
 #         project_id,
 #         "_",
 #         i,
-#         "_processed.txt",
+#         "_processed.tsv",
 #         sep = ""
 #     )
 #     if (de_method == "deseq"){

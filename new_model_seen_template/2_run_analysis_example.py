@@ -76,6 +76,9 @@ num_simulated = params["num_simulated"]
 # Directory containing simulated experiments
 simulated_data_dir = params["simulated_data_dir"]
 
+# Directory containing trained VAE model
+vae_model_dir = params["vae_model_dir"]
+
 # Size of the latent dimension
 latent_dim = params["latent_dim"]
 
@@ -135,38 +138,20 @@ process.fetch_template_experiment(
 
 # ## Simulate data
 
-"""# Simulate multiple experiments UPDATE COMMENT
-# This step creates the following files in "<local_dir>/pseudo_experiment/" directory:
-#   - selected_simulated_data_SRP012656_<n>.txt
-#   - selected_simulated_encoded_data_SRP012656_<n>.txt
-#   - template_normalized_data_SRP012656_test.txt
-# in which "<n>" is an integer in the range of [0, num_runs-1]
-
-# REMOVE LATER
-NN_architecture = "NN_test"
-dataset_name = "new_model_seen_template"
-# Load pickled file
-scaler = pickle.load(open(scaler_filename, "rb"))
-
-# Update simulated dir
-os.makedirs(os.path.join(local_dir, "pseudo_experiment"), exist_ok=True)
-
-#------------
+# Run simulation
 simulate_expression_data.shift_template_experiment(
     normalized_compendium_filename,
-    NN_architecture,
+    vae_model_dir,
     latent_dim,
-    dataset_name,
-    scaler,
-    experiment_to_sample_filename,
+    scaler_transform_filename,
+    metadata_filename,
     metadata_delimiter,
-    experiment_id_colname,
-    sample_id_colname,
+    metadata_experiment_colname,
+    metadata_sample_colname,
     project_id,
     local_dir,
-    base_dir,
-    num_runs,
-)"""
+    simulated_data_dir,
+    num_simulated)
 
 # ## Process template and simulated experiments
 #
@@ -193,14 +178,12 @@ if de_method == "deseq":
     # Process simulated data
     for i in range(num_simulated):
         simulated_filename = os.path.join(
-            local_dir,
-            "pseudo_experiment",
-            f"selected_simulated_data_{project_id}_{i}.txt",
+            simulated_data_dir,
+            f"selected_simulated_data_{project_id}_{i}.tsv",
         )
         out_simulated_filename = os.path.join(
-            local_dir,
-            "pseudo_experiment",
-            f"selected_simulated_data_{project_id}_{i}_processed.txt",
+            simulated_data_dir,
+            f"selected_simulated_data_{project_id}_{i}_processed.tsv",
         )
         stats.process_samples_for_DESeq(
             simulated_filename,
@@ -219,9 +202,8 @@ else:
 
     for i in range(num_simulated):
         simulated_filename = os.path.join(
-            local_dir,
-            "pseudo_experiment",
-            f"selected_simulated_data_{project_id}_{i}.txt",
+            simulated_data_dir,
+            f"selected_simulated_data_{project_id}_{i}.tsv",
         )
         stats.process_samples_for_limma(
             simulated_filename,
@@ -235,9 +217,6 @@ else:
 
 # Create subdirectory: "<local_dir>/DE_stats/"
 os.makedirs(os.path.join(local_dir, "DE_stats"), exist_ok=True)
-
-# +
-# Pass simulated dir to R scripts below
 
 # + magic_args="-i template_DE_grouping_filename -i project_id -i processed_template_filename -i local_dir -i base_dir -i de_method" language="R"
 #
@@ -265,19 +244,19 @@ os.makedirs(os.path.join(local_dir, "DE_stats"), exist_ok=True)
 #     )
 # }
 
-# + magic_args="-i template_DE_grouping_filename -i project_id -i base_dir -i local_dir -i num_simulated -i de_method" language="R"
+# + magic_args="-i template_DE_grouping_filename -i project_id -i base_dir -i simulated_data_dir -i num_simulated -i de_method" language="R"
 #
 # source(paste0(base_dir, '/sophie/DE_analysis.R'))
 #
 # # Files created: "<local_dir>/DE_stats/DE_stats_simulated_data_<project_id>_<n>.txt"
 # for (i in 0:(num_simulated-1)){
 #     simulated_data_filename <- paste(
-#         local_dir,
-#         "pseudo_experiment/selected_simulated_data_",
+#         simulated_data_dir,
+#         "/selected_simulated_data_",
 #         project_id,
 #         "_",
 #         i,
-#         "_processed.txt",
+#         "_processed.tsv",
 #         sep = ""
 #     )
 #     if (de_method == "deseq"){

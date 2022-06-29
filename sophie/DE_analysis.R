@@ -121,9 +121,17 @@ get_DE_stats_DESeq <- function(metadata_file,
   print("Checking sample ordering...")
   print(all.equal(colnames(expression_data), rownames(metadata)))
 
-  group <- interaction(metadata[,1])
+  # re order metadata table if it doesn't match to expression_data
+  if(!(all.equal(colnames(expression_data), rownames(metadata)))) {
+    print("reordering samples...")
+    metadata <- metadata[order(match(rownames(metadata), colnames(expression_data))), ]
+  }
 
-  mm <- model.matrix(~0 + group)
+  # Set group variable as a factor to avoid implying a linear relationship
+  # between conditions: https://support.bioconductor.org/p/78516/
+  metadata$group <- factor(metadata$group)
+
+  group <- interaction(metadata$group)
 
   # Note about DESeq object
   # Different function calls to create DESeq object depending on the input data.

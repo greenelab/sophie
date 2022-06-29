@@ -9,7 +9,6 @@ project_id	"SRP012656"
 num_simulated	2
 simulated_data_dir	"simulated_data/"
 vae_model_dir	"../data/models/recount2/"
-training_stats_dir	"logs/"
 latent_dim	30
 scaler_transform_filename	"../data/scalers/scaler_transform_recount2.pickle"
 DE_method	"deseq"
