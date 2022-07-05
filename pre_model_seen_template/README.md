@@ -1,12 +1,9 @@
 Here we use an existing trained VAE model and simulate a background dataset using a template experiment that is included in the training dataset (i.e. the datasets used to train the VAE model).
 
 ## Usage
-1. Create a configuration and metadata files for your analysis. 
+1. Create a configuration file for your analysis. See [example configuration file](config_example.tsv). The definition for each paramter in the configuation file is describe below.
 
-See [example configuration file](config_example.tsv).
-When editing this configuration file, use a text editor instead of excel.
-
-The definition for each paramter in the configuation file is describe below:
+Note: When editing this configuration file, use a text editor instead of excel.
 
 Parameters for input data files and directories to create
 
@@ -44,8 +41,6 @@ Parameters for intermediate files created. Names of files need to be specified:
 
 
 2. Create metadata files that specify how samples within the selected template experiment should be grouped for the differential expression analysis.
-By default, a two-condition differential expression analysis is supported (case vs control). 
-In the metadata file, "1"s denote controls and "2"s denote cases.  
-An example can be seen [here](SRP012656_groups.tsv)
+By default, a two-condition differential expression analysis is supported (case vs control). In the metadata file, "1"s denote controls and "2"s denote cases. In the metadata file, "1"s denote controls and "2"s denote cases. This file is specified by the `template_DE_grouping_filename` parameter. An example can be seen [here](SRP012656_groups.tsv)
 
 3. Run notebooks in order
