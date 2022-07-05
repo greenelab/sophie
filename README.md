@@ -12,6 +12,8 @@ Likewise SOPHIE allows users to identify specific gene expression signatures tha
 SOPHIE was originally described and applied in the [generic-expression-patterns](https://github.com/greenelab/generic-expression-patterns) repository.
 
 ## Usage
+*Operating system:* Linux 
+
 First you need to set up your local repository:
 1. Download and install [github's large file tracker](https://git-lfs.github.com/).
 2. Install [miniconda](https://docs.conda.io/en/latest/miniconda.html)
