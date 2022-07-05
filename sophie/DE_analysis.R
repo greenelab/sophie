@@ -179,7 +179,6 @@ get_DE_stats_DESeq <- function(metadata_file,
   # We combined these RSEs in download_recount2_data.R so we cannot use `DESeqDataSet()` which expects SE inputs.
   # Again, we round our combined RSE data and use `DESeqDataSetFromMatrix()`.
   # Looks like rounding is also performed for `DESeqDataSet()` as well.
-metadata$group <- as.factor(metadata$group)
   ddset <- DESeqDataSetFromMatrix(expression_data, colData=metadata, design = ~group)
 
   deseq_object <- DESeq(ddset, quiet=TRUE)
