@@ -120,16 +120,18 @@ get_DE_stats_DESeq <- function(metadata_file,
 
   print("Checking sample ordering...")
   print(all.equal(colnames(expression_data), rownames(metadata)))
-  
+
   # re order metadata table if it doesn't match to expression_data
-  if(!(all.equal(colnames(expression_data), metadata$sample))) {
+  if(!(all.equal(colnames(expression_data), rownames(metadata)))) {
     print("reordering samples...")
-    metadata <- metadata[order(match(metadata$sample, colnames(expression_data))), ]
+    metadata <- metadata[order(match(rownames(metadata), colnames(expression_data))), ]
   }
 
-  group <- interaction(metadata[,1])
+  # Set group variable as a factor to avoid implying a linear relationship
+  # between conditions: https://support.bioconductor.org/p/78516/
+  metadata$group <- factor(metadata$group)
 
-  mm <- model.matrix(~0 + group)
+  group <- interaction(metadata$group)
 
   # Note about DESeq object
   # Different function calls to create DESeq object depending on the input data.
@@ -177,7 +179,6 @@ get_DE_stats_DESeq <- function(metadata_file,
   # We combined these RSEs in download_recount2_data.R so we cannot use `DESeqDataSet()` which expects SE inputs.
   # Again, we round our combined RSE data and use `DESeqDataSetFromMatrix()`.
   # Looks like rounding is also performed for `DESeqDataSet()` as well.
-metadata$group <- as.factor(metadata$group)
   ddset <- DESeqDataSetFromMatrix(expression_data, colData=metadata, design = ~group)
 
   deseq_object <- DESeq(ddset, quiet=TRUE)

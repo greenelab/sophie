@@ -5,13 +5,15 @@ Software to distinguish between common and experiment-specific gene expression s
 
 **University of Pennsylvania**
 
-This repository is named after the the character [Sophie](https://en.wikipedia.org/wiki/Ponyo), from Hayao Miyazaki's animated film *Howl's moving castle*. 
+This repository is named after the the character [Sophie](https://en.wikipedia.org/wiki/Howl%27s_Moving_Castle_(film)), from Hayao Miyazaki's animated film *Howl's moving castle*. 
 In the film, Sophie’s appearance as an old woman, despite being a young woman that has been cursed, shows that initial observation can be misleading. 
 Likewise SOPHIE allows users to identify specific gene expression signatures that can be masked by common background patterns. 
 
 SOPHIE was originally described and applied in the [generic-expression-patterns](https://github.com/greenelab/generic-expression-patterns) repository.
 
 ## Usage
+*Operating system:* Linux 
+
 First you need to set up your local repository:
 1. Download and install [github's large file tracker](https://git-lfs.github.com/).
 2. Install [miniconda](https://docs.conda.io/en/latest/miniconda.html)
