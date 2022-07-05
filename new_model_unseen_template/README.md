@@ -18,8 +18,9 @@ Parameters for input data files supplied by the user, directories that sophie wi
 | raw_compendium_filename | str: Downloaded compendium gene expression data file. The input dataset should be a matrix that is sample x gene. The file should tab-delimited. The gene ids need to be consistent between the template and compendium datasets. The input dataset should be generated using the same platform as the model you plan to use (i.e. RNA-seq or array). The expression values are expected to have been uniformly processed and can be estimated counts (RNA-seq) or log2 expression (array).|
 | project_id | str:  The experiment id to use as template experiment. This experiment is **not contained** within the training dataset that was used to train the VAE. The id is used to name intermediate simulated data files created.|
 | num_simulated| int: The number of experiments to simulate. Experiments are simulated by shifting the template experiment in the latent space. In general, [Lee et al., Figure S4](https://www.biorxiv.org/content/10.1101/2021.05.24.445440v3) found that downstream statistical results were robust to different numbers of simulated experiments so starting with 25 experiments can compromise on the runtime of the downstream analyses. |
-| vae_model_dir | str:  The location where the VAE model files (.h5) are stored.|
-| training_stats_dir| str: Directory containing the VAE training log files.|
+| simulated_data_dir | str:  The location where the simulated experiments are written to. This directory is created by https://github.com/greenelab/ponyo/blob/master/ponyo/utils.py|
+| vae_model_dir | str:  The location where the VAE model files (.h5) are written to. This directory is created by https://github.com/greenelab/ponyo/blob/master/ponyo/utils.py|
+| training_stats_dir| str: Directory where the VAE training log files are written to. This directory is created by https://github.com/greenelab/ponyo/blob/master/ponyo/utils.py|
 | learning_rate| float: Step size used for gradient descent. In other words, it's how quickly the  methods is learning|
 | batch_size | str: Training is performed in batches. So this determines the number of samples to consider at a given time|
 | epochs | int: Number of times to train over the entire input dataset|
@@ -28,10 +29,10 @@ Parameters for input data files supplied by the user, directories that sophie wi
 | latent_dim | int: Size of the bottleneck layer|
 | epsilon_std | float: Standard deviation of Normal distribution to sample latent space|
 | validation_frac | float: Fraction of samples to use for validation in VAE training|
-| DE_method| str: "limma" or "DESeq". Differential expression method to use.|
+| DE_method| str: "limma" or "deseq". Differential expression method to use.|
 | count_threshold | int: Remove genes that have mean count <= count_threshold. By default this threshold is set to None, then no genes are removed.|
-| template_process_samples_filename | str: Metadata file that maps sample ids to labels that indicate if the sample is kept or discarded. |
-| template_DE_grouping_filename | str: Metadata file that maps sample ids to groups for differential expression analysis.|
+| template_process_samples_filename | str: Metadata file that maps sample ids to labels that indicate if the sample is kept or discarded. By default, a two-condition differential expression analysis is supported (case vs control). However, some experiments included more than 2 conditions and so these "extra" samples should not considered in the downstream differential expression analysis. This file contains 2 columns that are tab-delimited. The first column contains sample ids and the second column contains the group id: "1"s denote controls, "2"s denote cases and "drop" denotes samples to remove. For example, say there is an experiment that contains WT samples, mutant A samples and mutant B samples. Since we assume a two-condition experiment, we will remove all mutant B samples so that we can compare WT vs mutant A samples.|
+| template_DE_grouping_filename | str: Metadata file that maps sample ids to groups for differential expression analysis. By default, a two-condition differential expression analysis is supported (case vs control). This file contains 2 columns that are tab-delimited. The first column contains sample ids and the second column contains the group id: "1"s denote controls and "2"s denote cases. |
 | rank_genes_by | str: "log2FoldChange" if using DESeq or "log2FC" if using limma. |
 | is_recount2| bool: True is the compendium dataset being used is recount2. This will determine how experiment ids are parsed for latent transformation approaches.|
 

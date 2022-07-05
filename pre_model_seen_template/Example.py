@@ -73,10 +73,11 @@ project_id = params["project_id"]
 # Number of simulated experiments to generate
 num_simulated = params["num_simulated"]
 
-# Directory containing simulated experiments
+# Directory that simulated experiments will be written to
+# This directory is created by https://github.com/greenelab/ponyo/blob/master/ponyo/utils.py
 simulated_data_dir = params["simulated_data_dir"]
 
-# Directory containing trained VAE model
+# Directory containing the existing trained VAE model
 vae_model_dir = params["vae_model_dir"]
 
 # Size of the latent dimension
@@ -86,8 +87,8 @@ latent_dim = params["latent_dim"]
 scaler_transform_filename = params["scaler_transform_filename"]
 
 # Which DE method to use
-# We recommend that if data is RNA-seq then use DESeq2
-# If data is microarray then use Limma
+# We recommend that if data is RNA-seq then use DESeq2 ("deseq")
+# If data is microarray then use Limma ("limma")
 de_method = params["DE_method"]
 
 # If using DE-seq, setting this parameter will
@@ -95,13 +96,17 @@ de_method = params["DE_method"]
 count_threshold = params["count_threshold"]
 
 # Metadata file that specifies which samples to keep for DE analysis (Optional)
+# By default, a two-condition differential expression analysis is supported (case vs control).
+# However, some experiments included more than 2 conditions and so these "extra" samples 
+# should not considered in the downstream differential expression analysis. 
 template_process_samples_filename = params["template_process_samples_filename"]
     
 # Metadata file that specifies sample grouping for DE analysis
 template_DE_grouping_filename = params["template_DE_grouping_filename"]
 
 # Statistic to use to rank genes or pathways by
-# Choices are {} FILL IN
+# Choices are "log2FoldChange" if using DESeq or "log2FC" 
+# if using limma as the `de_method`
 col_to_rank_genes = params["rank_genes_by"]
 
 # +
@@ -322,7 +327,14 @@ template_DE_stats, simulated_DE_summary_stats = ranking.process_and_rank_genes_p
 # * (Real): Statistics for template experiment
 # * (Simulated): Statistics across simulated experiments
 # * Number of experiments: Number of simulated experiments
-# * Z-score: High z-score indicates that gene is more changed in template compared to the null set of simulated experiments (high z-score = highly specific to template experiment)
+# * Z-score: High z-score indicates that gene is more changed in template compared to the null set of simulated experiments (high z-score = highly specific to template experiment). These z-scores are true standard scores using mean and standard deviation. The calculation for the z-score for a given gene is
+#     
+# $$
+# \frac{\text{log}_2 \text{fold change of the gene in the template experiment} - mean(\text{log}_2 \text{fold change of the gene in simulated experiments)}}{variance(\text{log}_2 \text{fold change of the gene in simulated experiments)}}
+# $$
+#
+# The range of this z-score will vary depending on the number of simulated experiments, so the number of simulated experiments should be held constant if the user is performing multiple SOPHIE runs or if they're comparing to previous SOPHIE runs performed by someone else.
+#
 # * Percentile (simulated): percentile rank of the median(abs(log fold change)). So its the median absolute change for that gene across the 25 simulated experiments that is then converted to a percentile rank from 0 - 100. Where a higher percentile indicates that the gene was highly changed frequently and would suggest that the gene is more commonly DE.
 # * Percent DE (simulated): the fraction of the simulated experiments in which that gene was found to be DE using (log fold change > 1 and adjusted p-value < 0.05). _Note:_ you may find that many genes have a 0 fraction. This is because there is some compression that happens when pushing data through the VAE so the variance of the simulated experiments is lower compared to the real experiment. We are aware of this limitation in the VAE and are looking at how to improve the variance and biological signal captured by the VAE, however we were still able to demonstrate that for now the VAE is able to simulate realistic looking biological experiments in our previous [paper](https://academic.oup.com/gigascience/article/9/11/giaa117/5952607).
 #
